@@ -47,7 +47,9 @@ function CountrySelect({ value, onChange }) {
             ) : (
               <span className="text-gray-400 text-sm">Select Country</span>
             )}
-            <span className="text-sm">{selectedCountry ? selectedCountry.name : ""}</span>
+            <span className="text-sm">
+              {selectedCountry ? selectedCountry.name : ""}
+            </span>
           </div>
           <ChevronDown className="w-4 h-4 text-gray-500" />
         </div>
@@ -90,8 +92,8 @@ export default function TouristSignupForm() {
   });
 
   const [showPassword, setShowPassword] = useState(false);
+  const [step, setStep] = useState("form");
   const [isVerifying, setIsVerifying] = useState(false);
-  const [showVerifyScreen, setShowVerifyScreen] = useState(false);
 
   const handleChange = (e) => {
     const { name, value, type, checked } = e.target;
@@ -110,26 +112,51 @@ export default function TouristSignupForm() {
     setIsVerifying(true);
     setTimeout(() => {
       setIsVerifying(false);
-      setShowVerifyScreen(true);
+      setStep("verify");
     }, 2000);
   };
 
-  if (showVerifyScreen) {
+  if (step === "verify") {
     return (
       <div className="min-h-screen flex items-center justify-center px-4 text-center bg-white">
         <div className="max-w-md p-6 rounded-lg shadow-md border">
-          <h2 className="text-2xl font-bold text-green-600 mb-2">Verify Your Email</h2>
+          <h2 className="text-2xl font-bold text-green-600 mb-2">
+            Verify Your Email
+          </h2>
           <p className="text-gray-700 mb-4">
             We’ve sent a confirmation link to{" "}
-            <span className="font-medium">{formData.email}</span>.
-            <br />
+            <span className="font-medium">{formData.email}</span>.<br />
             Please check your inbox to activate your account.
           </p>
           <button
-            onClick={() => setShowVerifyScreen(false)}
+            onClick={() => setStep("profile")}
             className="mt-4 px-4 py-2 bg-green-500 text-white rounded-md hover:bg-green-600 text-sm"
           >
-            Back to Form
+            I’ve Verified My Email
+          </button>
+        </div>
+      </div>
+    );
+  }
+
+  if (step === "profile") {
+    return (
+      <div className="min-h-screen flex items-center justify-center px-4 bg-white">
+        <div className="max-w-xl p-6 rounded-lg shadow-md border w-full">
+          <h2 className="text-2xl font-bold text-green-600 mb-4">
+            Create Your Profile
+          </h2>
+          <p className="text-gray-700 mb-6">
+            Now that your email is verified, let’s set up your tourist profile.
+            (This is a dummy screen.)
+          </p>
+          <button
+            onClick={() =>
+              alert("You can now implement profile creation here.")
+            }
+            className="px-4 py-2 bg-green-500 text-white rounded-md hover:bg-green-600 text-sm"
+          >
+            Continue
           </button>
         </div>
       </div>
@@ -138,32 +165,34 @@ export default function TouristSignupForm() {
 
   return (
     <div className="min-h-screen bg-white flex flex-col justify-center items-center px-4 py-10">
-      {/* Heading */}
       <div className="max-w-md w-full text-center mb-8">
-        <h2 className="text-2xl font-bold text-gray-800">Sign up as a Tourist</h2>
+        <h2 className="text-2xl font-bold text-gray-800">
+          Sign up as a Tourist
+        </h2>
       </div>
 
-      {/* Signup Card */}
       <div className="w-full max-w-lg p-6 space-y-6">
-        {/* Google Signup */}
         <button className="w-full border border-gray-300 rounded-lg flex items-center justify-center gap-2 py-2 hover:bg-gray-50 transition">
           <FcGoogle className="text-xl" />
-          <span className="text-sm font-medium text-gray-700">Continue with Google</span>
+          <span className="text-sm font-medium text-gray-700">
+            Continue with Google
+          </span>
         </button>
 
-        {/* OR separator */}
         <div className="flex items-center gap-4">
           <hr className="flex-1 border-gray-300" />
           <span className="text-sm text-gray-500">or</span>
           <hr className="flex-1 border-gray-300" />
         </div>
 
-        {/* Form */}
         <form onSubmit={handleSubmit} className="space-y-6">
-          {/* First and Last Name */}
-          <div className="flex flex-col sm:flex-row gap-4">
-            <div className="flex-1 flex flex-col gap-1">
-              <label htmlFor="firstName" className="text-sm text-gray-700 font-medium">
+          {/* ✅ First and Last Name in same row */}
+          <div className="flex gap-3">
+            <div className="w-1/2 flex flex-col gap-1">
+              <label
+                htmlFor="firstName"
+                className="text-sm text-gray-700 font-medium"
+              >
                 First Name
               </label>
               <input
@@ -176,9 +205,11 @@ export default function TouristSignupForm() {
                 className="px-3 py-2 border rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-green-500"
               />
             </div>
-
-            <div className="flex-1 flex flex-col gap-1">
-              <label htmlFor="lastName" className="text-sm text-gray-700 font-medium">
+            <div className="w-1/2 flex flex-col gap-1">
+              <label
+                htmlFor="lastName"
+                className="text-sm text-gray-700 font-medium"
+              >
                 Last Name
               </label>
               <input
@@ -193,16 +224,13 @@ export default function TouristSignupForm() {
             </div>
           </div>
 
-          {/* Email */}
           <div className="flex flex-col gap-1">
-            <label htmlFor="email" className="text-sm text-gray-700 font-medium">
+            <label className="text-sm text-gray-700 font-medium">
               Email Address
             </label>
             <input
               type="email"
-              id="email"
               name="email"
-              placeholder="Let us help you find talented guides"
               value={formData.email}
               onChange={handleChange}
               required
@@ -210,15 +238,13 @@ export default function TouristSignupForm() {
             />
           </div>
 
-          {/* Password */}
           <div className="flex flex-col gap-1 relative">
-            <label htmlFor="password" className="text-sm text-gray-700 font-medium">
+            <label className="text-sm text-gray-700 font-medium">
               Password
             </label>
             <div className="relative">
               <input
                 type={showPassword ? "text" : "password"}
-                id="password"
                 name="password"
                 placeholder="Password (8 or more characters)"
                 value={formData.password}
@@ -232,15 +258,20 @@ export default function TouristSignupForm() {
                 className="absolute inset-y-0 right-3 flex items-center text-gray-500 hover:text-gray-700 focus:outline-none"
                 aria-label={showPassword ? "Hide password" : "Show password"}
               >
-                {showPassword ? <EyeOff className="w-5 h-5" /> : <Eye className="w-5 h-5" />}
+                {showPassword ? (
+                  <EyeOff className="w-5 h-5" />
+                ) : (
+                  <Eye className="w-5 h-5" />
+                )}
               </button>
             </div>
           </div>
 
-          {/* Country */}
-          <CountrySelect value={formData.country} onChange={handleCountryChange} />
+          <CountrySelect
+            value={formData.country}
+            onChange={handleCountryChange}
+          />
 
-          {/* Checkboxes */}
           <div className="flex flex-col gap-4 mt-2 text-sm text-gray-700">
             <label className="inline-flex items-center">
               <input
@@ -255,6 +286,7 @@ export default function TouristSignupForm() {
                 Yes, send me tips about top destinations and guides.
               </span>
             </label>
+
             <label className="inline-flex items-center">
               <input
                 type="checkbox"
@@ -269,19 +301,25 @@ export default function TouristSignupForm() {
                 <a href="#" className="text-green-600 underline">
                   Tourist Terms of Service
                 </a>
-                , including the <a href="#" className="text-green-600 underline">User Agreement</a> and{" "}
-                <a href="#" className="text-green-600 underline">Privacy Policy</a>.
+                , including the{" "}
+                <a href="#" className="text-green-600 underline">
+                  User Agreement
+                </a>{" "}
+                and{" "}
+                <a href="#" className="text-green-600 underline">
+                  Privacy Policy
+                </a>
+                .
               </span>
             </label>
           </div>
 
-          {/* Submit */}
           <button
             type="submit"
             disabled={isVerifying}
             className="w-full py-2 rounded-md text-sm font-medium transition bg-green-500 text-white hover:bg-green-600 disabled:opacity-60"
           >
-            {isVerifying ? "Creating account..." : "Create my account"}
+            {isVerifying ? "Verifying Email..." : "Create my account"}
           </button>
 
           <p className="mt-4 text-md text-gray-700 text-center">

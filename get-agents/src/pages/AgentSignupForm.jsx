@@ -5,6 +5,7 @@ import countries from "world-countries";
 import Flag from "react-world-flags";
 import { Link } from "react-router-dom";
 
+// Country dropdown component
 function CountrySelect({ value, onChange }) {
   const countryList = countries
     .map((c) => ({
@@ -83,6 +84,7 @@ function CountrySelect({ value, onChange }) {
   );
 }
 
+// Main form component
 export default function AgentSignupForm() {
   const [formData, setFormData] = useState({
     firstName: "",
@@ -112,26 +114,22 @@ export default function AgentSignupForm() {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-
-    // Show loading indicator
     setIsVerifying(true);
-
-    // Simulate delay and then show email verification screen
     setTimeout(() => {
       setIsVerifying(false);
       setShowVerifyScreen(true);
     }, 2000);
   };
 
-  // Dummy verify screen
+  // After submit
   if (showVerifyScreen) {
     return (
       <div className="min-h-screen flex items-center justify-center px-4 text-center bg-white">
         <div className="max-w-md p-6 rounded-lg shadow-md border">
           <h2 className="text-2xl font-bold text-green-600 mb-2">Verify Your Email</h2>
           <p className="text-gray-700 mb-4">
-            We've sent a confirmation link to <span className="font-medium">{formData.email}</span>.
-            <br />Please check your inbox to complete your signup.
+            We've sent a confirmation link to <span className="font-medium">{formData.email}</span>.<br />
+            Please check your inbox to complete your signup.
           </p>
           <button
             onClick={() => setShowVerifyScreen(false)}
@@ -146,31 +144,26 @@ export default function AgentSignupForm() {
 
   return (
     <div className="min-h-screen bg-white flex flex-col justify-center items-center px-4 py-10">
-      {/* Heading */}
       <div className="max-w-md w-full text-center mb-8">
         <h2 className="text-2xl font-bold text-gray-800">Sign up as an Agent</h2>
       </div>
 
-      {/* Signup Card */}
       <div className="w-full max-w-lg p-6 space-y-6">
-        {/* Google Signup */}
         <button className="w-full border border-gray-300 rounded-lg flex items-center justify-center gap-2 py-2 hover:bg-gray-50 transition">
           <FcGoogle className="text-xl" />
           <span className="text-sm font-medium text-gray-700">Sign up with Google</span>
         </button>
 
-        {/* OR separator */}
         <div className="flex items-center gap-4">
           <hr className="flex-1 border-gray-300" />
           <span className="text-sm text-gray-500">or</span>
           <hr className="flex-1 border-gray-300" />
         </div>
 
-        {/* Form */}
         <form onSubmit={handleSubmit} className="space-y-6">
-          {/* First and Last Name */}
-          <div className="flex flex-col sm:flex-row gap-4">
-            <div className="flex-1 flex flex-col gap-1">
+          {/* First & Last Name */}
+          <div className="flex gap-4">
+            <div className="w-1/2 flex flex-col gap-1">
               <label htmlFor="firstName" className="text-sm text-gray-700 font-medium">
                 First Name
               </label>
@@ -184,7 +177,7 @@ export default function AgentSignupForm() {
                 className="px-3 py-2 border rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-green-500"
               />
             </div>
-            <div className="flex-1 flex flex-col gap-1">
+            <div className="w-1/2 flex flex-col gap-1">
               <label htmlFor="lastName" className="text-sm text-gray-700 font-medium">
                 Last Name
               </label>
@@ -278,7 +271,7 @@ export default function AgentSignupForm() {
             </label>
           </div>
 
-          {/* Submit Button */}
+          {/* Submit */}
           <button
             type="submit"
             className="w-full py-2 rounded-md text-sm font-medium transition bg-green-500 text-white hover:bg-green-600 disabled:opacity-60"
