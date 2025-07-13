@@ -95,6 +95,8 @@ export default function AgentSignupForm() {
   });
 
   const [showPassword, setShowPassword] = useState(false);
+  const [isVerifying, setIsVerifying] = useState(false);
+  const [showVerifyScreen, setShowVerifyScreen] = useState(false);
 
   const handleChange = (e) => {
     const { name, value, type, checked } = e.target;
@@ -110,16 +112,43 @@ export default function AgentSignupForm() {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    console.log(formData); // Submit logic here
+
+    // Show loading indicator
+    setIsVerifying(true);
+
+    // Simulate delay and then show email verification screen
+    setTimeout(() => {
+      setIsVerifying(false);
+      setShowVerifyScreen(true);
+    }, 2000);
   };
+
+  // Dummy verify screen
+  if (showVerifyScreen) {
+    return (
+      <div className="min-h-screen flex items-center justify-center px-4 text-center bg-white">
+        <div className="max-w-md p-6 rounded-lg shadow-md border">
+          <h2 className="text-2xl font-bold text-green-600 mb-2">Verify Your Email</h2>
+          <p className="text-gray-700 mb-4">
+            We've sent a confirmation link to <span className="font-medium">{formData.email}</span>.
+            <br />Please check your inbox to complete your signup.
+          </p>
+          <button
+            onClick={() => setShowVerifyScreen(false)}
+            className="mt-4 px-4 py-2 bg-green-500 text-white rounded-md hover:bg-green-600 text-sm"
+          >
+            Back to Form
+          </button>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="min-h-screen bg-white flex flex-col justify-center items-center px-4 py-10">
       {/* Heading */}
       <div className="max-w-md w-full text-center mb-8">
-        <h2 className="text-2xl font-bold text-gray-800">
-          Sign up as an Agent
-        </h2>
+        <h2 className="text-2xl font-bold text-gray-800">Sign up as an Agent</h2>
       </div>
 
       {/* Signup Card */}
@@ -127,9 +156,7 @@ export default function AgentSignupForm() {
         {/* Google Signup */}
         <button className="w-full border border-gray-300 rounded-lg flex items-center justify-center gap-2 py-2 hover:bg-gray-50 transition">
           <FcGoogle className="text-xl" />
-          <span className="text-sm font-medium text-gray-700">
-            Sign up with Google
-          </span>
+          <span className="text-sm font-medium text-gray-700">Sign up with Google</span>
         </button>
 
         {/* OR separator */}
@@ -144,10 +171,7 @@ export default function AgentSignupForm() {
           {/* First and Last Name */}
           <div className="flex flex-col sm:flex-row gap-4">
             <div className="flex-1 flex flex-col gap-1">
-              <label
-                htmlFor="firstName"
-                className="text-sm text-gray-700 font-medium"
-              >
+              <label htmlFor="firstName" className="text-sm text-gray-700 font-medium">
                 First Name
               </label>
               <input
@@ -160,12 +184,8 @@ export default function AgentSignupForm() {
                 className="px-3 py-2 border rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-green-500"
               />
             </div>
-
             <div className="flex-1 flex flex-col gap-1">
-              <label
-                htmlFor="lastName"
-                className="text-sm text-gray-700 font-medium"
-              >
+              <label htmlFor="lastName" className="text-sm text-gray-700 font-medium">
                 Last Name
               </label>
               <input
@@ -180,12 +200,9 @@ export default function AgentSignupForm() {
             </div>
           </div>
 
-          {/* Work Email */}
+          {/* Email */}
           <div className="flex flex-col gap-1">
-            <label
-              htmlFor="email"
-              className="text-sm text-gray-700 font-medium"
-            >
+            <label htmlFor="email" className="text-sm text-gray-700 font-medium">
               Work Email Address
             </label>
             <input
@@ -201,10 +218,7 @@ export default function AgentSignupForm() {
 
           {/* Password */}
           <div className="flex flex-col gap-1 relative">
-            <label
-              htmlFor="password"
-              className="text-sm text-gray-700 font-medium"
-            >
+            <label htmlFor="password" className="text-sm text-gray-700 font-medium">
               Password
             </label>
             <div className="relative">
@@ -222,22 +236,14 @@ export default function AgentSignupForm() {
                 type="button"
                 onClick={() => setShowPassword((v) => !v)}
                 className="absolute inset-y-0 right-3 flex items-center text-gray-500 hover:text-gray-700 focus:outline-none"
-                aria-label={showPassword ? "Hide password" : "Show password"}
               >
-                {showPassword ? (
-                  <EyeOff className="w-5 h-5" />
-                ) : (
-                  <Eye className="w-5 h-5" />
-                )}
+                {showPassword ? <EyeOff className="w-5 h-5" /> : <Eye className="w-5 h-5" />}
               </button>
             </div>
           </div>
 
-          {/* Country Dropdown */}
-          <CountrySelect
-            value={formData.country}
-            onChange={handleCountryChange}
-          />
+          {/* Country */}
+          <CountrySelect value={formData.country} onChange={handleCountryChange} />
 
           {/* Checkboxes */}
           <div className="flex flex-col gap-4 mt-2 text-sm text-gray-700">
@@ -251,8 +257,7 @@ export default function AgentSignupForm() {
                 style={{ transform: "scale(1.5)" }}
               />
               <span className="ml-2 leading-tight">
-                Send me emails with tips on how to find talent that fits my
-                needs.
+                Send me emails with tips on how to find talent that fits my needs.
               </span>
             </label>
             <label className="inline-flex items-center">
@@ -266,27 +271,25 @@ export default function AgentSignupForm() {
               />
               <span className="ml-2 leading-tight">
                 I agree to the{" "}
-                <a href="#" className="text-green-600 underline">
-                  Get Agents Terms of Service
-                </a>
-                , including the <a href="#" className="text-green-600 underline">User Agreement</a> and <a href="#" className="text-green-600 underline">Privacy Policy.</a>
+                <a href="#" className="text-green-600 underline">Terms of Service</a>, including the{" "}
+                <a href="#" className="text-green-600 underline">User Agreement</a> and{" "}
+                <a href="#" className="text-green-600 underline">Privacy Policy</a>.
               </span>
             </label>
           </div>
 
-          {/* Submit */}
+          {/* Submit Button */}
           <button
             type="submit"
-            className="w-full py-2 rounded-md text-sm font-medium transition bg-green-500 text-white hover:bg-green-600"
+            className="w-full py-2 rounded-md text-sm font-medium transition bg-green-500 text-white hover:bg-green-600 disabled:opacity-60"
+            disabled={isVerifying}
           >
-            Create my account
+            {isVerifying ? "Creating account..." : "Create my account"}
           </button>
 
           <p className="mt-4 text-md text-gray-700 text-center">
             Already have an account?{" "}
-            <Link to="/login" className="text-green-600 underline">
-              Log In
-            </Link>
+            <Link to="/login" className="text-green-600 underline">Log In</Link>
           </p>
         </form>
       </div>
